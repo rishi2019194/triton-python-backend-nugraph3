@@ -48,16 +48,8 @@ class HitGraphProducer():
     def create_graph(self, hit_table_hit_id, hit_table_local_plane, hit_table_local_time, \
                     hit_table_local_wire, hit_table_integral, hit_table_rms, \
                     spacepoint_table_spacepoint_id, spacepoint_table_hit_id_u, spacepoint_table_hit_id_v, \
-                    spacepoint_table_hit_id_y, particle_table_g4_id, particle_table_parent_id, \
-                    particle_table_type, particle_table_momentum, particle_table_start_process, \
-                    particle_table_end_process, edep_table_energy, edep_table_energy_fraction, \
-                    edep_table_g4_id, edep_table_hit_id, event_table_is_cc, event_table_nu_pdg, \
-                    event_table_nu_vtx_corr_x, event_table_nu_vtx_corr_y, event_table_nu_vtx_corr_z, \
-                    event_table_nu_vtx_wire_pos_0, event_table_nu_vtx_wire_pos_1, event_table_nu_vtx_wire_pos_2, \
-                    event_table_nu_vtx_wire_time):
+                    spacepoint_table_hit_id_y):
         
-        particle_table_start_process = particle_table_start_process.astype(str)
-        particle_table_end_process = particle_table_end_process.astype(str)
         evt = {
             'hit_table': pd.DataFrame({
                 'hit_id':hit_table_hit_id, 'local_plane': hit_table_local_plane, 'local_time':hit_table_local_time, \
@@ -66,24 +58,6 @@ class HitGraphProducer():
             'spacepoint_table': pd.DataFrame({
                 'spacepoint_id':spacepoint_table_spacepoint_id, 'hit_id_u':spacepoint_table_hit_id_u, \
                 'hit_id_v':spacepoint_table_hit_id_v, 'hit_id_y':spacepoint_table_hit_id_y
-            }),
-
-            'particle_table': pd.DataFrame({
-                'g4_id':particle_table_g4_id, 'parent_id':particle_table_parent_id, 'type':particle_table_type, \
-                'momentum':particle_table_momentum, 'start_process':particle_table_start_process, \
-                'end_process':particle_table_end_process
-            }),
-            'edep_table' : pd.DataFrame({
-                'energy': edep_table_energy,
-                'energy_fraction': edep_table_energy_fraction,
-                'g4_id': edep_table_g4_id,
-                'hit_id': edep_table_hit_id
-            }),
-            'event_table':pd.DataFrame({
-                'is_cc':event_table_is_cc, 'nu_pdg':event_table_nu_pdg, 'nu_vtx_corr_x':event_table_nu_vtx_corr_x, \
-                'nu_vtx_corr_y':event_table_nu_vtx_corr_y, 'nu_vtx_corr_z':event_table_nu_vtx_corr_z, \
-                'nu_vtx_wire_pos_0':event_table_nu_vtx_wire_pos_0, 'nu_vtx_wire_pos_1':event_table_nu_vtx_wire_pos_1, \
-                'nu_vtx_wire_pos_2':event_table_nu_vtx_wire_pos_2, 'nu_vtx_wire_time':event_table_nu_vtx_wire_time
             })
                                 
         }
@@ -215,6 +189,7 @@ class HeteroDataset(Dataset):
     def len(self):
         return 1
     def get(self, idx=0):
+        # print(self.hetero_data)
         return self.transform(self.hetero_data)
     
 class NuGraph3_model(nn.Module):
@@ -236,58 +211,29 @@ class NuGraph3_model(nn.Module):
                      'v':torch.tensor(np.array([[368.83023, 173.01247, 154.14513, 4.449338 ], [145.29645, 80.54078, 282.34027, 1.8969047]]).astype(np.float32)),
                      'y':torch.tensor(np.array([[546.2973, 172.77615, 116.974, 4.1647816],[283.47656, 73.99135, 115.49256, 1.4615369]]).astype(np.float32))}
         
-        self.hitgraph = HitGraphProducer(semantic_labeller=pynuml.labels.SimpleLabels(),
-                                    event_labeller=pynuml.labels.FlavorLabels(),
-                                    label_vertex=True)
+        self.hitgraph = HitGraphProducer()
 
     def forward(self, hit_table_hit_id, hit_table_local_plane, hit_table_local_time, \
                     hit_table_local_wire, hit_table_integral, hit_table_rms, \
                     spacepoint_table_spacepoint_id, spacepoint_table_hit_id_u, spacepoint_table_hit_id_v, \
-                    spacepoint_table_hit_id_y, particle_table_g4_id, particle_table_parent_id, \
-                    particle_table_type, particle_table_momentum, particle_table_start_process, \
-                    particle_table_end_process, edep_table_energy, edep_table_energy_fraction, \
-                    edep_table_g4_id, edep_table_hit_id, event_table_is_cc, event_table_nu_pdg, \
-                    event_table_nu_vtx_corr_x, event_table_nu_vtx_corr_y, event_table_nu_vtx_corr_z, \
-                    event_table_nu_vtx_wire_pos_0, event_table_nu_vtx_wire_pos_1, event_table_nu_vtx_wire_pos_2, \
-                    event_table_nu_vtx_wire_time):
+                    spacepoint_table_hit_id_y):
         
         gnn_hetero_data = self.hitgraph.create_graph(hit_table_hit_id, hit_table_local_plane, hit_table_local_time, \
                                                     hit_table_local_wire, hit_table_integral, hit_table_rms, \
                                                     spacepoint_table_spacepoint_id, spacepoint_table_hit_id_u, spacepoint_table_hit_id_v, \
-                                                    spacepoint_table_hit_id_y, particle_table_g4_id, particle_table_parent_id, \
-                                                    particle_table_type, particle_table_momentum, particle_table_start_process, \
-                                                    particle_table_end_process, edep_table_energy, edep_table_energy_fraction, \
-                                                    edep_table_g4_id, edep_table_hit_id, event_table_is_cc, event_table_nu_pdg, \
-                                                    event_table_nu_vtx_corr_x, event_table_nu_vtx_corr_y, event_table_nu_vtx_corr_z, \
-                                                    event_table_nu_vtx_wire_pos_0, event_table_nu_vtx_wire_pos_1, event_table_nu_vtx_wire_pos_2, \
-                                                    event_table_nu_vtx_wire_time)
+                                                    spacepoint_table_hit_id_y)
 
         # print(gnn_hetero_data)
         transform = Compose((ng.util.PositionFeatures(self.planes),
                              ng.util.FeatureNorm(self.planes, self.norm),
                              ng.util.HierarchicalEdges(self.planes),
                              ng.util.EventLabels()))
+        
         hetero_dataset = HeteroDataset(gnn_hetero_data, transform=transform)
-        # hetero_loader = DataLoader(hetero_dataset, batch_size=1)
         data = hetero_dataset.get()
-        # Iterate through your data loader and perform inference
-        # for data in hetero_loader:
         self.model.step(data)
         x = self.model.data
-        
-        # print(x)
-        # _, _, _, x = self.model.step(gnn_hetero_data)
 
-
-        # # gnn_hetero_batch = Batch.from_data_list([gnn_hetero_data])
-
-        # transform = Compose((ng.util.PositionFeatures(self.planes),
-        #                      ng.util.FeatureNorm(self.planes, self.norm),
-        #                      ng.util.HierarchicalEdges(self.planes),
-        #                      ng.util.EventLabels()))
-        
-        # hetero_batch_loader = DataLoader(HeteroDataset(gnn_hetero_data, transform=transform), batch_size=1)
-        # x = self.trainer.predict(self.model, hetero_batch_loader)
         return x['evt']['e'].detach().numpy(), x['u']['x_semantic'].detach().numpy(), \
                 x['v']['x_semantic'].detach().numpy(), x['y']['x_semantic'].detach().numpy(), \
                 x['u']['x_filter'].detach().numpy(), x['v']['x_filter'].detach().numpy(), \
@@ -406,83 +352,12 @@ class TritonPythonModel:
             spacepoint_table_hit_id_v = pb_utils.get_input_tensor_by_name(request, "spacepoint_table_hit_id_v")
             spacepoint_table_hit_id_y = pb_utils.get_input_tensor_by_name(request, "spacepoint_table_hit_id_y")
 
-            particle_table_g4_id = pb_utils.get_input_tensor_by_name(request, "particle_table_g4_id")
-            particle_table_parent_id = pb_utils.get_input_tensor_by_name(request, "particle_table_parent_id")
-            particle_table_type = pb_utils.get_input_tensor_by_name(request, "particle_table_type")
-            particle_table_momentum = pb_utils.get_input_tensor_by_name(request, "particle_table_momentum")
-            particle_table_start_process = pb_utils.get_input_tensor_by_name(request, "particle_table_start_process")
-            particle_table_end_process = pb_utils.get_input_tensor_by_name(request, "particle_table_end_process")
-
-            edep_table_energy = pb_utils.get_input_tensor_by_name(request, "edep_table_energy")
-            edep_table_energy_fraction = pb_utils.get_input_tensor_by_name(request, "edep_table_energy_fraction")
-            edep_table_g4_id = pb_utils.get_input_tensor_by_name(request, "edep_table_g4_id")
-            edep_table_hit_id = pb_utils.get_input_tensor_by_name(request, "edep_table_hit_id")
-
-            event_table_is_cc = pb_utils.get_input_tensor_by_name(request, "event_table_is_cc")
-            event_table_nu_pdg = pb_utils.get_input_tensor_by_name(request, "event_table_nu_pdg")
-            event_table_nu_vtx_corr_x = pb_utils.get_input_tensor_by_name(request, "event_table_nu_vtx_corr_x")
-            event_table_nu_vtx_corr_y = pb_utils.get_input_tensor_by_name(request, "event_table_nu_vtx_corr_y")
-            event_table_nu_vtx_corr_z = pb_utils.get_input_tensor_by_name(request, "event_table_nu_vtx_corr_z")
-            event_table_nu_vtx_wire_pos_0 = pb_utils.get_input_tensor_by_name(request, "event_table_nu_vtx_wire_pos_0")
-            event_table_nu_vtx_wire_pos_1 = pb_utils.get_input_tensor_by_name(request, "event_table_nu_vtx_wire_pos_1")
-            event_table_nu_vtx_wire_pos_2 = pb_utils.get_input_tensor_by_name(request, "event_table_nu_vtx_wire_pos_2")
-            event_table_nu_vtx_wire_time  = pb_utils.get_input_tensor_by_name(request, "event_table_nu_vtx_wire_time")
-
-            # print("Hit Table")
-            # print(hit_table_hit_id.as_numpy())
-            # print(hit_table_local_plane.as_numpy())
-            # print(hit_table_local_time.as_numpy())
-            # print(hit_table_local_wire.as_numpy())
-            # print(hit_table_integral.as_numpy())
-            # print(hit_table_rms.as_numpy())
-            # print()
-
-            # print("Spacepoint Table")
-            # print(spacepoint_table_spacepoint_id.as_numpy())
-            # print(spacepoint_table_hit_id_u.as_numpy())
-            # print(spacepoint_table_hit_id_v.as_numpy())
-            # print(spacepoint_table_hit_id_y.as_numpy())
-            # print()
-
-            # print("Particle Table")
-            # print(particle_table_g4_id.as_numpy())
-            # print(particle_table_parent_id.as_numpy())
-            # print(particle_table_type.as_numpy())
-            # print(particle_table_momentum.as_numpy())
-            # print(particle_table_start_process.as_numpy())
-            # print(particle_table_end_process.as_numpy())
-            # print()    
-
-            # print("Edep Table")        
-            # print(edep_table_energy.as_numpy())
-            # print(edep_table_energy_fraction.as_numpy())
-            # print(edep_table_g4_id.as_numpy())
-            # print(edep_table_hit_id.as_numpy())
-            # print()
-
-            # print("Event Table")
-            # print(event_table_is_cc.as_numpy())
-            # print(event_table_nu_pdg.as_numpy())
-            # print(event_table_nu_vtx_corr_x.as_numpy())
-            # print(event_table_nu_vtx_corr_y.as_numpy())
-            # print(event_table_nu_vtx_corr_z.as_numpy())
-            # print(event_table_nu_vtx_wire_pos_0.as_numpy())
-            # print(event_table_nu_vtx_wire_pos_1.as_numpy())
-            # print(event_table_nu_vtx_wire_pos_2.as_numpy())
-            # print(event_table_nu_vtx_wire_time.as_numpy())
-            
             output0, output1, output2, output3, output4, output5, output6, output7 = \
                                         self.NuGraph3_model(hit_table_hit_id.as_numpy(), hit_table_local_plane.as_numpy(), \
-                                                    hit_table_local_time.as_numpy(), \
-                    hit_table_local_wire.as_numpy(), hit_table_integral.as_numpy(), hit_table_rms.as_numpy(), \
-                    spacepoint_table_spacepoint_id.as_numpy(), spacepoint_table_hit_id_u.as_numpy(), spacepoint_table_hit_id_v.as_numpy(), \
-                    spacepoint_table_hit_id_y.as_numpy(), particle_table_g4_id.as_numpy(), particle_table_parent_id.as_numpy(), \
-                    particle_table_type.as_numpy(), particle_table_momentum.as_numpy(), particle_table_start_process.as_numpy(), \
-                    particle_table_end_process.as_numpy(), edep_table_energy.as_numpy(), edep_table_energy_fraction.as_numpy(), \
-                    edep_table_g4_id.as_numpy(), edep_table_hit_id.as_numpy(), event_table_is_cc.as_numpy(), event_table_nu_pdg.as_numpy(), \
-                    event_table_nu_vtx_corr_x.as_numpy(), event_table_nu_vtx_corr_y.as_numpy(), event_table_nu_vtx_corr_z.as_numpy(), \
-                    event_table_nu_vtx_wire_pos_0.as_numpy(), event_table_nu_vtx_wire_pos_1.as_numpy(), event_table_nu_vtx_wire_pos_2.as_numpy(), \
-                    event_table_nu_vtx_wire_time.as_numpy())
+                                                    hit_table_local_time.as_numpy(), hit_table_local_wire.as_numpy(), \
+                                                    hit_table_integral.as_numpy(), hit_table_rms.as_numpy(), \
+                                                    spacepoint_table_spacepoint_id.as_numpy(), spacepoint_table_hit_id_u.as_numpy(), \
+                                                    spacepoint_table_hit_id_v.as_numpy(), spacepoint_table_hit_id_y.as_numpy())
 
             # Create output tensors. You need pb_utils.Tensor
             # objects to create pb_utils.InferenceResponse.

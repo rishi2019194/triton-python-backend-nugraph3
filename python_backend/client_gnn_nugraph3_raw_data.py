@@ -48,29 +48,7 @@ with pd.HDFStore('nugraph3_raw_event.h5', 'r') as test_data:
         "spacepoint_table_spacepoint_id": np.array(test_data["spacepoint_table"]["spacepoint_id"]).astype(np.int32),
         "spacepoint_table_hit_id_u": np.array(test_data["spacepoint_table"]["hit_id_u"]).astype(np.int32),
         "spacepoint_table_hit_id_v": np.array(test_data["spacepoint_table"]["hit_id_v"]).astype(np.int32),
-        "spacepoint_table_hit_id_y": np.array(test_data["spacepoint_table"]["hit_id_y"]).astype(np.int32), 
-
-        "particle_table_g4_id" : np.array(test_data["particle_table"]["g4_id"]).astype(np.int32),
-        "particle_table_parent_id": np.array(test_data["particle_table"]["parent_id"]).astype(np.int32),
-        "particle_table_type": np.array(test_data["particle_table"]["type"]).astype(np.int32),
-        "particle_table_momentum": np.array(test_data["particle_table"]["momentum"]).astype(np.float32),
-        "particle_table_start_process": np.array(test_data["particle_table"]["start_process"]).astype(object),
-        "particle_table_end_process": np.array(test_data["particle_table"]["end_process"]).astype(object),
-
-        "edep_table_energy": np.array(test_data['edep_table']['energy']).astype(np.float32),
-        "edep_table_energy_fraction": np.array(test_data['edep_table']['energy_fraction']).astype(np.float32),
-        "edep_table_g4_id": np.array(test_data['edep_table']['g4_id']).astype(np.int32),
-        "edep_table_hit_id": np.array(test_data['edep_table']['hit_id']).astype(np.int32),
-
-        "event_table_is_cc": np.array(test_data['event_table']['is_cc']).astype(np.int32),
-        "event_table_nu_pdg": np.array(test_data['event_table']['nu_pdg']).astype(np.int32),
-        "event_table_nu_vtx_corr_x": np.array(test_data['event_table']['nu_vtx_corr_x']).astype(np.float32),
-        "event_table_nu_vtx_corr_y": np.array(test_data['event_table']['nu_vtx_corr_y']).astype(np.float32),
-        "event_table_nu_vtx_corr_z": np.array(test_data['event_table']['nu_vtx_corr_z']).astype(np.float32),
-        "event_table_nu_vtx_wire_pos_0": np.array(test_data['event_table']['nu_vtx_wire_pos_0']).astype(np.int32),
-        "event_table_nu_vtx_wire_pos_1": np.array(test_data['event_table']['nu_vtx_wire_pos_1']).astype(np.int32),
-        "event_table_nu_vtx_wire_pos_2": np.array(test_data['event_table']['nu_vtx_wire_pos_2']).astype(np.int32),
-        "event_table_nu_vtx_wire_time": np.array(test_data['event_table']['nu_vtx_wire_time']).astype(np.float32)
+        "spacepoint_table_hit_id_y": np.array(test_data["spacepoint_table"]["hit_id_y"]).astype(np.int32)
     }
 
 
