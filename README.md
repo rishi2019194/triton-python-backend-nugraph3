@@ -40,13 +40,27 @@ Step 3:
 
 ## Using conda command
 
+
 # Client-side inference setup and commands
-We setup the client-side in - Python, C++ and C++ with LarSoft framework. It is preferred to use the C++ framework as we eventually want to shift to the LarSoft framework which is C++ compatible. 
+We setup the client-side in - Python, C++ and C++ with LarSoft framework. It is preferred to use the C++ with LarSoft framework
 
 ## Python client inference
+To send inference request from Python-client, we first read the  H5 data file and then send the processed dictionary input for inference and display the results. 
+  Libraries needed to run the python client file -
+
+    pip install tritonclient[all]
+    pip install pandas
+    pip install numpy
+    
+  To run the python-based client, run the following commands -
+
+    cd python_backend_scripts/
+    python3 client_gnn_nugraph3_raw_data.py
 
 ## C++ client inference
 
+## C++ client with LarSoft framework 
 
 # Changes made to the existing code (Hacks at the server end)
+
 
