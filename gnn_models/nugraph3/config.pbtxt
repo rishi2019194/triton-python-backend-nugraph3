@@ -24,82 +24,152 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-name: "nugraph3"
+name: "nugraph3_new"
 backend: "python"
 input [
   {
-    name: "sp_num_nodes"
+    name: "hit_table_hit_id"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+  {
+    name: "hit_table_local_plane"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+  {
+    name: "hit_table_local_time"
     data_type: TYPE_FP32
     dims: [-1]
   },
   {
-    name:"evt_y"
+    name: "hit_table_local_wire"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+  {
+    name: "hit_table_integral"
     data_type: TYPE_FP32
     dims: [-1]
   },
   {
-    name: "u_x_dict"
+    name: "hit_table_rms"
     data_type: TYPE_FP32
-    dims: [-1, 2]
+    dims: [-1]
   },
   {
-    name: "u_pos"
+    name: "spacepoint_table_spacepoint_id"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+  {
+    name: "spacepoint_table_hit_id_u"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+  {
+    name: "spacepoint_table_hit_id_v"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "spacepoint_table_hit_id_y"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "particle_table_g4_id"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "particle_table_parent_id"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "particle_table_type"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "particle_table_momentum"
     data_type: TYPE_FP32
-    dims: [-1, 2]
+    dims: [-1]
   },
-  {
-    name: "v_x_dict"
-    data_type: TYPE_FP32
-    dims: [-1, 2]
-  },
-  {
-    name:"v_pos"
-    data_type: TYPE_FP32
-    dims: [-1, 2]
-  },
-  {
-    name: "y_x_dict"
-    data_type: TYPE_FP32
-    dims: [-1, 2]
-  },
-  {
-    name:"y_pos"
-    data_type: TYPE_FP32
-    dims: [-1, 2]
-  },
-  {
-    name: "u_plane_u"
-    data_type: TYPE_INT64
-    dims: [2,-1]
-  },
-  {
-    name: "u_nexus_sp"
-    data_type: TYPE_INT64
-    dims: [2,-1]
-  },
-  {
-    name: "v_plane_v"
-    data_type: TYPE_INT64
-    dims: [2,-1]
-  },
-  {
-    name: "v_nexus_sp"
-    data_type: TYPE_INT64
-    dims: [2,-1]
-  },
-  {
-    name: "y_plane_y"
-    data_type: TYPE_INT64
-    dims: [2,-1]
-  },
-  {
-    name: "y_nexus_sp"
-    data_type: TYPE_INT64
-    dims: [2,-1]
-  },
-  {
-    name: "examples"
+    {
+    name: "particle_table_start_process"
     data_type: TYPE_STRING
+    dims: [-1]
+  },
+    {
+    name: "particle_table_end_process"
+    data_type: TYPE_STRING
+    dims: [-1]
+  },
+    {
+    name: "edep_table_energy"
+    data_type: TYPE_FP32
+    dims: [-1]
+  },
+    {
+    name: "edep_table_energy_fraction"
+    data_type: TYPE_FP32
+    dims: [-1]
+  },
+    {
+    name: "edep_table_g4_id"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "edep_table_hit_id"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "event_table_is_cc"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "event_table_nu_pdg"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "event_table_nu_vtx_corr_x"
+    data_type: TYPE_FP32
+    dims: [-1]
+  },
+    {
+    name: "event_table_nu_vtx_corr_y"
+    data_type: TYPE_FP32
+    dims: [-1]
+  },
+    {
+    name: "event_table_nu_vtx_corr_z"
+    data_type: TYPE_FP32
+    dims: [-1]
+  },
+    {
+    name: "event_table_nu_vtx_wire_pos_0"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "event_table_nu_vtx_wire_pos_1"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "event_table_nu_vtx_wire_pos_2"
+    data_type: TYPE_INT32
+    dims: [-1]
+  },
+    {
+    name: "event_table_nu_vtx_wire_time"
+    data_type: TYPE_FP32
     dims: [-1]
   }
 ]
@@ -152,7 +222,7 @@ output [
 
   }
 ]
-
+instance_group [{ kind: KIND_CPU }]
 parameters: {
   key: "EXECUTION_ENV_PATH",
   value: {string_value: "/root/miniforge3/envs/numl"}
