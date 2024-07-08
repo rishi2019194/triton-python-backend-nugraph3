@@ -24,9 +24,15 @@ Step 2:
     docker run --shm-size=1g --ulimit memlock=-1 -p 8000:8000 -p 8001:8001 -p 8002:8002 --ulimit stack=67108864 -v "$(pwd)":/mnt -ti nvcr.io/nvidia/tritonserver:<xx.yy>-py3
 
     where <xx.yy> is triton version, eg - 24.05
-  
-Step 3:
+
+Step3:
+  Cloning the triton-python-backend-nugraph3 repo inside the docker container
+
+     git clone https://github.com/rishi2019194/triton-python-backend-nugraph3.git
+     
+Step 4:
    Starting the triton server for sending inference request
+   
      tritonserver --model-repository models_folder/
 
 ## Using pip command
@@ -52,7 +58,7 @@ To send inference request from Python-client, we first read the  H5 data file an
     pip install pandas
     pip install numpy
     
-  To run the python-based client, run the following commands -
+  To run the python-based client, run the following commands after cloning this repo in your working directory -
 
     cd python_backend_scripts/
     python3 client_gnn_nugraph3_raw_data.py
