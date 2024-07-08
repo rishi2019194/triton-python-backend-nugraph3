@@ -31,13 +31,15 @@ Step3:
      git clone https://github.com/rishi2019194/triton-python-backend-nugraph3.git
      
 Step 4:
-   Starting the triton server for sending inference request
+   Starting the triton server for sending inference request (models-folder should be accessible from within the container and should follow the triton-expected format)
    
      tritonserver --model-repository models_folder/
+     
 
 ## Using pip command
   To run the triton-server, install the following libraries in the base environment of the docker container -
 
+    git clone https://github.com/nugraph/nugraph.git
     pip install --no-deps -e ./nugraph
     pip install pytorch_lightning
     pip install pynuml
@@ -52,6 +54,7 @@ We setup the client-side in - Python, C++ and C++ with LarSoft framework. It is 
 
 ## Python client inference
 To send inference request from Python-client, we first read the  H5 data file and then send the processed dictionary input for inference and display the results. 
+
   Libraries needed to run the python client file -
 
     pip install tritonclient[all]
