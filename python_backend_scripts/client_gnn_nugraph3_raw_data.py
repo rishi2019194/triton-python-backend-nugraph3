@@ -34,7 +34,7 @@ import pandas as pd
 import torch
 from torch_geometric.data import Data, HeteroData
 
-model_name = "nugraph3_new"
+model_name = "nugraph3"
 
 with pd.HDFStore('nugraph3_raw_event.h5', 'r') as test_data:
     test_inputs = {
