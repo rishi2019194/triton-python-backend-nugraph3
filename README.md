@@ -68,5 +68,11 @@ To send inference request from Python-client, we first read the  H5 data file an
 ## C++ client with LarSoft framework 
 
 # Changes made to the existing code (Hacks at the server end)
+## HitGraphProducer Class in Pynuml
+In the current release version of [HitGraphProducer class](https://github.com/nugraph/pynuml/blob/main/pynuml/process/hitgraph.py#L10) of pynuml, the constructor requires **_file:'pynuml.io.File'_**, which is not possible since pre-processing is happening at the server end and we don't have access to the h5 file there for that event. Hence, as an hack we had to make our own HitGraphProducer class which doesn't have h5 file as one of the constructor's arguement. Apart from that we add a **_create_graph()_** in that class which pre-processes the input sent from the client for inference.
+
+## EventLabels Class in Nugraph
+In the current version of [EventLabels class](https://github.com/nugraph/nugraph/blob/main/nugraph/nugraph/util/event_labels.py#L16) in nugraph, we first need to check if **_data["evt"]_** has attribute **_'y'_** or not. This is because during inference we won't have access to the ground truth labels of the event. Hence, we have added an if-condition to first check if _**'y'**_ is present as an attribute inside of _**data['evt']**_ or not.
+
 
 
