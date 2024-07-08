@@ -31,16 +31,16 @@ Step3:
      git clone https://github.com/rishi2019194/triton-python-backend-nugraph3.git
      
 Step 4:
-   Starting the triton server for sending inference request (models-folder should be accessible from within the container and should follow the triton-expected format)
+   Starting the triton server for sending inference request (models-folder should be accessible from within the container and should follow the triton-expected format. Also, first install all the libraries using pip/conda)
    
-     tritonserver --model-repository models_folder/
+     tritonserver --model-repository triton-python-backend-nugraph3/gnn_models_check/
      
 
 ## Using pip command
   To run the triton-server, install the following libraries in the base environment of the docker container -
 
-    git clone https://github.com/nugraph/nugraph.git
-    pip install --no-deps -e ./nugraph
+    git clone https://github.com/rishi2019194/nugraph.git
+    pip install --no-deps -e ./nugraph/nugraph
     pip install pytorch_lightning
     pip install pynuml
     pip install matplotlib pynvml seaborn
@@ -64,7 +64,7 @@ To send inference request from Python-client, we first read the  H5 data file an
   To run the python-based client, run the following commands after cloning this repo in your working directory -
 
     cd python_backend_scripts/
-    python3 client_gnn_nugraph3_raw_data.py
+    python client_gnn_nugraph3_raw_data.py
 
 ## C++ client inference
 
@@ -72,10 +72,14 @@ To send inference request from Python-client, we first read the  H5 data file an
 
 # Changes made to the existing code (Hacks at the server end)
 ## HitGraphProducer Class in Pynuml
-In the current release version of [HitGraphProducer class](https://github.com/nugraph/pynuml/blob/main/pynuml/process/hitgraph.py#L10) of pynuml, the constructor requires **_file:'pynuml.io.File'_**, which is not possible since pre-processing is happening at the server end and we don't have access to the h5 file there for that event. Hence, as an hack we had to make our own HitGraphProducer class which doesn't have h5 file as one of the constructor's arguement. Apart from that we add a **_create_graph()_** in that class which pre-processes the input sent from the client for inference.
+In the current release version of [HitGraphProducer class](https://github.com/nugraph/pynuml/blob/main/pynuml/process/hitgraph.py#L10) of pynuml repo, the constructor requires **_file:'pynuml.io.File'_**, which is not possible since pre-processing is happening at the server end and we don't have access to the h5 file there for that event. Hence, as an hack we had to make our [own HitGraphProducer class](https://github.com/rishi2019194/triton-python-backend-nugraph3/blob/main/gnn_models_check/nugraph3_new/1/model.py) which doesn't have h5 file as one of the constructor's arguement. Apart from that we add a [**_create_graph()_**](https://github.com/rishi2019194/triton-python-backend-nugraph3/blob/main/gnn_models_check/nugraph3_new/1/model.py#L48) in that class which pre-processes the input sent from the client for inference.
 
 ## EventLabels Class in Nugraph
-In the current version of [EventLabels class](https://github.com/nugraph/nugraph/blob/main/nugraph/nugraph/util/event_labels.py#L16) in nugraph, we first need to check if **_data["evt"]_** has attribute **_'y'_** or not. This is because during inference we won't have access to the ground truth labels of the event. Hence, we have added an if-condition to first check if _**'y'**_ is present as an attribute inside of _**data['evt']**_ or not.
+In the current version of [EventLabels class](https://github.com/nugraph/nugraph/blob/main/nugraph/nugraph/util/event_labels.py#L16) in nugraph repo, we first need to check if [**_data["evt"]_** has attribute **_'y'_** or not](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/util/event_labels.py#L16). This is because during inference we won't have access to the ground truth labels of the event. Hence, we have added an if-condition to first check if _**'y'**_ is present as an attribute inside of _**data['evt']**_ or not.
+
+## Changes in Nugraph3.py
+In the current verison of [Nugraph3.py](https://github.com/nugraph/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L207) in nugraph repo, we are calculating loss after computing the inference results in the step() function. However, in inference we don't have acccess to the ground truth y-labels, hence we can't calculate loss. Thus, as an hack we have c[ommented the loss computation step](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L208) in our code. Furthermore, to easily access the updated HeteroData object(data) which stores the inference result - we create a class attribute termed [**_data_**](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L205) via which we can access the inference  result and send that to  the  client.
+
 
 
 
