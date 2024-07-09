@@ -209,9 +209,7 @@ class NuGraph3_model(nn.Module):
                      'v':torch.tensor(np.array([[368.83023, 173.01247, 154.14513, 4.449338 ], [145.29645, 80.54078, 282.34027, 1.8969047]]).astype(np.float32)),
                      'y':torch.tensor(np.array([[546.2973, 172.77615, 116.974, 4.1647816],[283.47656, 73.99135, 115.49256, 1.4615369]]).astype(np.float32))}
         
-        self.hitgraph = HitGraphProducer(semantic_labeller=pynuml.labels.SimpleLabels(),
-                                    event_labeller=pynuml.labels.FlavorLabels(),
-                                    label_vertex=False)
+        self.hitgraph = HitGraphProducer()
 
     def forward(self, hit_table_hit_id, hit_table_local_plane, hit_table_local_time, \
                     hit_table_local_wire, hit_table_integral, hit_table_rms, \
