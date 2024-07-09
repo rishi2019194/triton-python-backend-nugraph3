@@ -9,7 +9,7 @@ We provide the necessary libraries required for the setup and the commands to ru
 triton expects as part of the configuration file (config.pbtxt). After doing so we create InferInput objects and create HTTP/GRPC connection between the triton-server hosted at the local machine/EAF-sever and the client end. After doing so we send these InferInput objects to the server for inference. Once the inference is complete we get back the results at the client and display/save them.
 
 # Installation Setup
-We provide with the installation steps using both pip and conda. It is preferred to use conda-environment, especially when working the eaf-server.
+We provide with the installation steps using both pip and conda. It is preferred to use conda-environment, especially when working with the eaf-server.
 
 ## Docker Setup
 Step 1:
