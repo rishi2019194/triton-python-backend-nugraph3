@@ -32,8 +32,13 @@ Step3:
      
 Step 4:
    Starting the triton server for sending inference request (models-folder should be accessible from within the container and should follow the triton-expected format. Also, first install all the libraries using pip/conda)
-   
-     tritonserver --model-repository triton-python-backend-nugraph3/gnn_models_check/
+   1.  Using same version of python as python-stub of triton (3.10). Therefore all libraries are installed in base environment via pip
+    
+      tritonserver --model-repository triton-python-backend-nugraph3/gnn_models_check/
+
+   2.  Using higher version of python and python-stub (3.12). Therefore all libraries are setted up inside in the conda-environment numl
+
+      tritonserver --model-repository triton-python-backend-nugraph3/gnn_models/
      
 
 ## Using pip command
