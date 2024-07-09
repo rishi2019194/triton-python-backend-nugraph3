@@ -24,14 +24,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import sys
-
 import numpy as np
 import tritonclient.http as httpclient
 from tritonclient.utils import *
-import h5py
 import pandas as pd
-import torch
 from torch_geometric.data import Data, HeteroData
 
 model_name = "nugraph3"
