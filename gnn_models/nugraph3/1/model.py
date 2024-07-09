@@ -226,7 +226,7 @@ class NuGraph3_model(nn.Module):
     def __init__(self):
         super(NuGraph3_model, self).__init__()
         self.MODEL = ng.models.nugraph3.nugraph3.NuGraph3
-        self.model = self.MODEL.load_from_checkpoint("gnn_models/nugraph3/1/hierarchical.ckpt", map_location='cpu')
+        self.model = self.MODEL.load_from_checkpoint("triton-python-backend-nugraph3/gnn_models/nugraph3/1/hierarchical.ckpt", map_location='cpu')
         self.accelerator, self.devices = ng.util.configure_device()
         self.trainer = pl.Trainer(accelerator=self.accelerator, devices=self.devices,
                             logger=False)
