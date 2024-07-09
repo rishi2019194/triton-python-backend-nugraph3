@@ -49,9 +49,6 @@ class HitGraphProducer():
                     hit_table_local_wire, hit_table_integral, hit_table_rms, \
                     spacepoint_table_spacepoint_id, spacepoint_table_hit_id_u, spacepoint_table_hit_id_v, \
                     spacepoint_table_hit_id_y):
-        
-        particle_table_start_process = particle_table_start_process.astype(str)
-        particle_table_end_process = particle_table_end_process.astype(str)
         evt = {
             'hit_table': pd.DataFrame({
                 'hit_id':hit_table_hit_id, 'local_plane': hit_table_local_plane, 'local_time':hit_table_local_time, \
