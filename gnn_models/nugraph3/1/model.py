@@ -48,13 +48,7 @@ class HitGraphProducer():
     def create_graph(self, hit_table_hit_id, hit_table_local_plane, hit_table_local_time, \
                     hit_table_local_wire, hit_table_integral, hit_table_rms, \
                     spacepoint_table_spacepoint_id, spacepoint_table_hit_id_u, spacepoint_table_hit_id_v, \
-                    spacepoint_table_hit_id_y, particle_table_g4_id, particle_table_parent_id, \
-                    particle_table_type, particle_table_momentum, particle_table_start_process, \
-                    particle_table_end_process, edep_table_energy, edep_table_energy_fraction, \
-                    edep_table_g4_id, edep_table_hit_id, event_table_is_cc, event_table_nu_pdg, \
-                    event_table_nu_vtx_corr_x, event_table_nu_vtx_corr_y, event_table_nu_vtx_corr_z, \
-                    event_table_nu_vtx_wire_pos_0, event_table_nu_vtx_wire_pos_1, event_table_nu_vtx_wire_pos_2, \
-                    event_table_nu_vtx_wire_time):
+                    spacepoint_table_hit_id_y):
         
         particle_table_start_process = particle_table_start_process.astype(str)
         particle_table_end_process = particle_table_end_process.astype(str)
@@ -66,24 +60,6 @@ class HitGraphProducer():
             'spacepoint_table': pd.DataFrame({
                 'spacepoint_id':spacepoint_table_spacepoint_id, 'hit_id_u':spacepoint_table_hit_id_u, \
                 'hit_id_v':spacepoint_table_hit_id_v, 'hit_id_y':spacepoint_table_hit_id_y
-            }),
-
-            'particle_table': pd.DataFrame({
-                'g4_id':particle_table_g4_id, 'parent_id':particle_table_parent_id, 'type':particle_table_type, \
-                'momentum':particle_table_momentum, 'start_process':particle_table_start_process, \
-                'end_process':particle_table_end_process
-            }),
-            'edep_table' : pd.DataFrame({
-                'energy': edep_table_energy,
-                'energy_fraction': edep_table_energy_fraction,
-                'g4_id': edep_table_g4_id,
-                'hit_id': edep_table_hit_id
-            }),
-            'event_table':pd.DataFrame({
-                'is_cc':event_table_is_cc, 'nu_pdg':event_table_nu_pdg, 'nu_vtx_corr_x':event_table_nu_vtx_corr_x, \
-                'nu_vtx_corr_y':event_table_nu_vtx_corr_y, 'nu_vtx_corr_z':event_table_nu_vtx_corr_z, \
-                'nu_vtx_wire_pos_0':event_table_nu_vtx_wire_pos_0, 'nu_vtx_wire_pos_1':event_table_nu_vtx_wire_pos_1, \
-                'nu_vtx_wire_pos_2':event_table_nu_vtx_wire_pos_2, 'nu_vtx_wire_time':event_table_nu_vtx_wire_time
             })
                                 
         }
