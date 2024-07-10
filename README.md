@@ -32,11 +32,11 @@ Step3:
      
 Step 4:
    Starting the triton server for sending inference request (models-folder should be accessible from within the container and should follow the triton-expected format. Also, first install all the libraries using pip/conda)
-   1.  Using same version of python as python-stub of triton (3.10). Therefore all libraries are installed in base environment via pip
+   1.  Using same version of python as python-stub of triton (3.10) with all libraries are installed in base environment via pip
     
       tritonserver --model-repository triton-python-backend-nugraph3/gnn_models_check/
 
-   2.  Using higher version of python and python-stub (3.12). Therefore all libraries are setted up inside in the conda-environment numl
+   2.  Using same version of python as python-stub of triton (3.10) with all libraries installed in numl environment via pip
 
       tritonserver --model-repository triton-python-backend-nugraph3/gnn_models/
      
@@ -52,6 +52,38 @@ Step 4:
 
 
 ## Using conda command
+ To run the triton-server, create conda environment "numl" inside the docker container and then install necessary libraries inside the environment -
+
+  Step 1: Install miniforge using the [mambaforge](https://github.com/conda-forge/miniforge#mambaforge) variant
+
+    wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+    bash Miniforge3-Linux-x86_64.sh
+
+  Step 2: Creating conda environment "numl" with python version 3.10 to be compatible with triton's python-stub version
+
+    conda create -n "numl" python=3.10
+    conda activate numl
+
+  Step 3: Cloning nugraph repo and this repo and install nugraph along with its dependencies
+
+    git clone https://github.com/rishi2019194/triton-python-backend-nugraph3.git
+    git clone https://github.com/rishi2019194/nugraph.git
+
+    pip install ./nugraph/nugraph
+
+  Step 4: Downgrade numpy version to 1.16.4. It is important to downgrade the numpy version to maintain compatibility
+
+    pip install numpy==1.16.4
+
+  Step 5: Install conda-pack in "numl" environment and then copy the activate script to the environment's bin. Also, add the EXECUTION_ENV_PATH  to the configpb.txt file of model
+
+    cp /root/miniforge3/envs/numl/lib/python3.10/site-packages/conda_pack/scripts/posix/activate /root/miniforge3/envs/numl/bin 
+    
+    parameters: {
+    key: "EXECUTION_ENV_PATH",
+    value: {string_value: "/root/miniforge3/envs/testing"}
+    }
+  
 
 
 # Client-side inference setup and commands
