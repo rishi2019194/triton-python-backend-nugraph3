@@ -400,7 +400,6 @@ class TritonPythonModel:
 
         # You should return a list of pb_utils.InferenceResponse. Length
         # of this list must match the length of `requests` list.
-        print("HI")
         return responses
 
     def finalize(self):
