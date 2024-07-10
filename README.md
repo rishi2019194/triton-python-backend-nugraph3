@@ -77,6 +77,7 @@ Step 4:
 
   Step 5: Install conda-pack in "numl" environment and then copy the activate script to the environment's bin. Also, add the EXECUTION_ENV_PATH  to the configpb.txt file of model
 
+    conda install conda-pack
     cp /root/miniforge3/envs/numl/lib/python3.10/site-packages/conda_pack/scripts/posix/activate /root/miniforge3/envs/numl/bin 
     
     parameters: {
