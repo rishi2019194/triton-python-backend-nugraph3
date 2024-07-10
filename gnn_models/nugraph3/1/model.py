@@ -199,11 +199,7 @@ class NuGraph3_model(nn.Module):
     def __init__(self):
         super(NuGraph3_model, self).__init__()
         self.MODEL = ng.models.nugraph3.nugraph3.NuGraph3
-        self.model = self.MODEL.load_from_checkpoint("triton-python-backend-nugraph3/gnn_models/nugraph3/1/hierarchical.ckpt", map_location='cpu')
-        self.accelerator, self.devices = ng.util.configure_device()
-        self.trainer = pl.Trainer(accelerator=self.accelerator, devices=self.devices,
-                            logger=False)
-        # self.model = self.MODEL.load_from_checkpoint("gnn_models/nugraph3_new/1/hierarchical.ckpt", map_location='cpu')
+        self.model = self.MODEL.load_from_checkpoint("triton-python-backend-nugraph3/gnn_models/nugraph3/1/hierarchical.ckpt")
         self.planes = ['u', 'v', 'y']
         self.norm = {'u':torch.tensor(np.array([[389.42752, 172.90794, 147.81108, 4.5563765], [147.1627, 78.01324, 228.31424, 2.2156637]]).astype(np.float32)),
                      'v':torch.tensor(np.array([[368.83023, 173.01247, 154.14513, 4.449338 ], [145.29645, 80.54078, 282.34027, 1.8969047]]).astype(np.float32)),
@@ -221,32 +217,15 @@ class NuGraph3_model(nn.Module):
                                                     spacepoint_table_spacepoint_id, spacepoint_table_hit_id_u, spacepoint_table_hit_id_v, \
                                                     spacepoint_table_hit_id_y)
 
-        # print(gnn_hetero_data)
         transform = Compose((ng.util.PositionFeatures(self.planes),
                              ng.util.FeatureNorm(self.planes, self.norm),
                              ng.util.HierarchicalEdges(self.planes),
                              ng.util.EventLabels()))
         hetero_dataset = HeteroDataset(gnn_hetero_data, transform=transform)
-        # hetero_loader = DataLoader(hetero_dataset, batch_size=1)
         data = hetero_dataset.get()
-        # Iterate through your data loader and perform inference
-        # for data in hetero_loader:
         self.model.step(data)
         x = self.model.data
         
-        # print(x)
-        # _, _, _, x = self.model.step(gnn_hetero_data)
-
-
-        # # gnn_hetero_batch = Batch.from_data_list([gnn_hetero_data])
-
-        # transform = Compose((ng.util.PositionFeatures(self.planes),
-        #                      ng.util.FeatureNorm(self.planes, self.norm),
-        #                      ng.util.HierarchicalEdges(self.planes),
-        #                      ng.util.EventLabels()))
-        
-        # hetero_batch_loader = DataLoader(HeteroDataset(gnn_hetero_data, transform=transform), batch_size=1)
-        # x = self.trainer.predict(self.model, hetero_batch_loader)
         return x['evt']['e'].detach().numpy(), x['u']['x_semantic'].detach().numpy(), \
                 x['v']['x_semantic'].detach().numpy(), x['y']['x_semantic'].detach().numpy(), \
                 x['u']['x_filter'].detach().numpy(), x['v']['x_filter'].detach().numpy(), \

@@ -33,6 +33,7 @@ from torch_geometric.data import Data, HeteroData
 model_name = "nugraph3"
 
 with pd.HDFStore('nugraph3_raw_event.h5', 'r') as test_data:
+    print(test_data)
     test_inputs = {
         "hit_table_hit_id": np.array(test_data['hit_table']['hit_id']).astype(np.int32),
         "hit_table_local_plane": np.array(test_data['hit_table']['local_plane']).astype(np.int32),
@@ -82,7 +83,7 @@ with httpclient.InferenceServerClient("localhost:8000") as client:
 
     response = client.infer(model_name, inputs, request_id=str(1), outputs=outputs)
     result = response.get_response()
-    output0_data = response.as_numpy("e_evt")
+    output_0_data = response.as_numpy("e_evt")
     output_1_data = response.as_numpy("x_semantic_u")
     output_2_data = response.as_numpy("x_semantic_v")
     output_3_data = response.as_numpy("x_semantic_y")
@@ -92,7 +93,7 @@ with httpclient.InferenceServerClient("localhost:8000") as client:
     output_7_data = response.as_numpy("v_evt")
 
     print("Triton output: ")
-    print("e_evt: ", output0_data)
+    print("e_evt: ", output_0_data)
     print("x_semantic_u: ", output_1_data)
     print("x_semantic_v: ", output_2_data)
     print("x_semantic_y: ", output_3_data)
