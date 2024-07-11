@@ -33,7 +33,6 @@ from torch_geometric.data import Data, HeteroData
 model_name = "nugraph3"
 
 with pd.HDFStore('nugraph3_raw_event.h5', 'r') as test_data:
-    print(test_data)
     test_inputs = {
         "hit_table_hit_id": np.array(test_data['hit_table']['hit_id']).astype(np.int32),
         "hit_table_local_plane": np.array(test_data['hit_table']['local_plane']).astype(np.int32),

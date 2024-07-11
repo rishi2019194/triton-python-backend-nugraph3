@@ -199,7 +199,7 @@ class NuGraph3_model(nn.Module):
     def __init__(self):
         super(NuGraph3_model, self).__init__()
         self.MODEL = ng.models.nugraph3.nugraph3.NuGraph3
-        self.model = self.MODEL.load_from_checkpoint("triton-python-backend-nugraph3/gnn_models/nugraph3/1/hierarchical.ckpt")
+        self.model = self.MODEL.load_from_checkpoint("gnn_models/nugraph3/1/hierarchical.ckpt")
         self.planes = ['u', 'v', 'y']
         self.norm = {'u':torch.tensor(np.array([[389.42752, 172.90794, 147.81108, 4.5563765], [147.1627, 78.01324, 228.31424, 2.2156637]]).astype(np.float32)),
                      'v':torch.tensor(np.array([[368.83023, 173.01247, 154.14513, 4.449338 ], [145.29645, 80.54078, 282.34027, 1.8969047]]).astype(np.float32)),
