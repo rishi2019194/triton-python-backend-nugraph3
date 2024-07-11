@@ -127,8 +127,7 @@ output [
 
   }
 ]
-instance_group [{ kind: KIND_CPU }]
 parameters: {
   key: "EXECUTION_ENV_PATH",
-  value: {string_value: "/root/miniforge3/envs/numl"}
+  value: {string_value: "$$TRITON_MODEL_DIRECTORY/numl.tar.gz"}
   }
