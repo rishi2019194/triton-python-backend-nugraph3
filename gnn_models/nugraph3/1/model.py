@@ -1,18 +1,15 @@
 import json
-import time 
-import pynuml
-import pytorch_lightning as pl
+import os
 import nugraph as ng
 import torch
 import numpy as np
 import pandas as pd
 import torch_geometric as pyg
 
-from typing import Any, Callable
+from typing import Callable
 from torch import nn
-from torch_geometric.loader import DataLoader
 from torch_geometric.transforms import Compose
-from torch_geometric.data import HeteroData, Batch, Dataset
+from torch_geometric.data import Dataset
 # triton_python_backend_utils is available in every Triton Python model. You
 # need to use this module to create inference requests and responses. It also
 # contains some utility functions for extracting information from model_config
@@ -198,6 +195,7 @@ class NuGraph3_model(nn.Module):
 
     def __init__(self):
         super(NuGraph3_model, self).__init__()
+        print("Current working directory:", os.getcwd())
         self.MODEL = ng.models.nugraph3.nugraph3.NuGraph3
         self.model = self.MODEL.load_from_checkpoint("gnn_models/nugraph3/1/hierarchical.ckpt")
         self.planes = ['u', 'v', 'y']

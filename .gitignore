@@ -84,6 +84,7 @@ ipython_config.py
 
 #numl
 gnn_models/nugraph3/numl.tar.gz
+models/add_sub/add_sub_env.tar.gz
 
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is
