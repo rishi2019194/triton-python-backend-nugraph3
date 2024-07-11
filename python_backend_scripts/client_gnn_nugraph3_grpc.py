@@ -28,7 +28,6 @@ import numpy as np
 import tritonclient.grpc as grpcclient
 from tritonclient.utils import *
 import pandas as pd
-from torch_geometric.data import Data, HeteroData
 
 model_name = "nugraph3"
 

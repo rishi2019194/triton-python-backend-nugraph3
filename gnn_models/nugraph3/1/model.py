@@ -197,7 +197,9 @@ class NuGraph3_model(nn.Module):
         super(NuGraph3_model, self).__init__()
         print("Current working directory:", os.getcwd())
         self.MODEL = ng.models.nugraph3.nugraph3.NuGraph3
-        self.model = self.MODEL.load_from_checkpoint("gnn_models/nugraph3/1/hierarchical.ckpt")
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        modelpath = os.path.dirname(os.path.abspath(__file__))
+        self.model = self.MODEL.load_from_checkpoint(os.path.join(modelpath, "hierarchical.ckpt"), map_location=self.device)
         self.planes = ['u', 'v', 'y']
         self.norm = {'u':torch.tensor(np.array([[389.42752, 172.90794, 147.81108, 4.5563765], [147.1627, 78.01324, 228.31424, 2.2156637]]).astype(np.float32)),
                      'v':torch.tensor(np.array([[368.83023, 173.01247, 154.14513, 4.449338 ], [145.29645, 80.54078, 282.34027, 1.8969047]]).astype(np.float32)),
@@ -221,13 +223,13 @@ class NuGraph3_model(nn.Module):
                              ng.util.EventLabels()))
         hetero_dataset = HeteroDataset(gnn_hetero_data, transform=transform)
         data = hetero_dataset.get()
-        self.model.step(data)
+        self.model.step(data.to(self.device))
         x = self.model.data
         
-        return x['evt']['e'].detach().numpy(), x['u']['x_semantic'].detach().numpy(), \
-                x['v']['x_semantic'].detach().numpy(), x['y']['x_semantic'].detach().numpy(), \
-                x['u']['x_filter'].detach().numpy(), x['v']['x_filter'].detach().numpy(), \
-                x['y']['x_filter'].detach().numpy(), x['evt']['v'].detach().numpy()
+        return x['evt']['e'].cpu().detach().numpy(), x['u']['x_semantic'].cpu().detach().numpy(), \
+                x['v']['x_semantic'].cpu().detach().numpy(), x['y']['x_semantic'].cpu().detach().numpy(), \
+                x['u']['x_filter'].cpu().detach().numpy(), x['v']['x_filter'].cpu().detach().numpy(), \
+                x['y']['x_filter'].cpu().detach().numpy(), x['evt']['v'].cpu().detach().numpy()
 
 class TritonPythonModel:
     """Your Python model must use the same class name. Every Python model
