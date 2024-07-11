@@ -71,9 +71,9 @@ Step 4:
 
     pip install ./nugraph/nugraph
 
-  Step 4: Downgrade numpy version to 1.16.4. It is important to downgrade the numpy version to maintain compatibility
+  Step 4: Downgrade numpy version to 1.26.4. It is important to downgrade the numpy version to maintain compatibility
 
-    pip install numpy==1.16.4
+    pip install numpy==1.26.4
 
   Step 5: Install conda-pack in "numl" environment and then copy the activate script to the environment's bin. Also, add the EXECUTION_ENV_PATH  to the configpb.txt file of model
 
