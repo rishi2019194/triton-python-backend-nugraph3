@@ -33,12 +33,14 @@ Step3:
 Step 4:
    Starting the triton server for sending inference request (models-folder should be accessible from within the container and should follow the triton-expected format. Also, first install all the libraries using pip/conda)
    1.  Using same version of python as python-stub of triton (3.10) with all libraries are installed in base environment via pip
-    
-      tritonserver --model-repository triton-python-backend-nugraph3/gnn_models_check/
 
-   2.  Using same version of python as python-stub of triton (3.10) with all libraries installed in numl environment via pip
+      cd triton-python-backend-nugraph3/
+      tritonserver --model-repository gnn_models_pip/
 
-      tritonserver --model-repository triton-python-backend-nugraph3/gnn_models/
+   3.  Using same version of python as python-stub of triton (3.10) with all libraries installed in numl environment via pip
+
+      cd triton-python-backend-nugraph3/
+      tritonserver --model-repository gnn_models/
      
 
 ## Using pip command
@@ -75,15 +77,29 @@ Step 4:
 
     pip install numpy==1.26.4
 
-  Step 5: Install conda-pack in "numl" environment and then copy the activate script to the environment's bin. Also, add the EXECUTION_ENV_PATH  to the configpb.txt file of model
+  Step 5: Install conda-pack in "numl" environment and then copy the activate script to the environment's bin. Also, add the EXECUTION_ENV_PATH  to the config.pbtxt file of model
 
     conda install conda-pack
     cp /root/miniforge3/envs/numl/lib/python3.10/site-packages/conda_pack/scripts/posix/activate /root/miniforge3/envs/numl/bin 
     
     parameters: {
     key: "EXECUTION_ENV_PATH",
-    value: {string_value: "/root/miniforge3/envs/testing"}
+    value: {string_value: "/root/miniforge3/envs/numl"}
     }
+
+  OR
+  
+  Install conda-pack in "numl" environment and then pack the environment as numl.tar.gz file inside nugraph3/ file. Also, add the EXECUTION_ENV_PATH of the tar.gz file to config.pbtxt file
+
+    conda install conda-pack
+    cd triton-python-backend-nugraph3/gnn_models/nugraph3/
+    conda-pack
+    
+    parameters: {
+    key: "EXECUTION_ENV_PATH",
+    value: {string_value: "$$TRITON_MODEL_DIRECTORY/numl.tar.gz"}
+    }
+  
   
 
 
