@@ -3,7 +3,7 @@ In this repository, we discuss about how to deploy the NuGraph3 network at Fermi
 We provide the necessary libraries required for the setup and the commands to run the client and server side for running inference.
 
 # Overview of the Setup
-**Server Side:** In the server side, we recieve the data from the client for the - _particle_table_ and _spacepoint_table_. We then carry out the pre-processing necessary for creating a HeteroData Object as input for the NuGraph3 network. We then pass the pre-processed HeteroData Graph object through the saved checkpoint NuGraph3 model which we already have loaded via pytorch-lightning. After getting the output from the model, we send the results back to the client.
+**Server Side:** In the server side, we recieve the data from the client for the - _particle_table_ and _spacepoint_table_. We then carry out the pre-processing necessary for creating a HeteroData Object as input for the Nugraph2/NuGraph3 network. We then pass the pre-processed HeteroData Graph object through the saved checkpoint NuGraph3 model which we already have loaded via pytorch-lightning. After getting the output from the model, we send the results back to the client.
 
 **Client Side:** In the client side, we first convert the read the H5 file/tables and flatten them into the necessary dictionary format of lists/vectors that
 triton expects as part of the configuration file (config.pbtxt). After doing so we create InferInput objects and create HTTP/GRPC connection between the triton-server hosted at the local machine/EAF-sever and the client end. After doing so we send these InferInput objects to the server for inference. Once the inference is complete we get back the results at the client and display/save them.
@@ -89,7 +89,7 @@ Step 4:
 
   OR
   
-  Install conda-pack in "numl" environment and then pack the environment as numl.tar.gz file inside nugraph3/ file. Also, add the EXECUTION_ENV_PATH of the tar.gz file to config.pbtxt file
+  Install conda-pack in "numl" environment and then pack the environment as numl.tar.gz file inside nugraph3/ & nugraph2/ folders. Also, add the EXECUTION_ENV_PATH of the tar.gz file to config.pbtxt file
 
     conda install conda-pack
     cd triton-python-backend-nugraph3/gnn_models/nugraph3/
@@ -115,10 +115,18 @@ To send inference request from Python-client, we first read the  H5 data file an
     pip install pandas
     pip install numpy
     
-  To run the python-based client, run the following commands after cloning this repo in your working directory -
+  To run the python-based client on HTTP (nugraph2 & nugraph3), run the following commands after cloning this repo in your working directory -
 
     cd python_backend_scripts/
-    python client_gnn_nugraph3_raw_data.py
+    python client_gnn_nugraph2_http.py
+    python client_gnn_nugraph3_http.py
+
+  To run the python-based client on GRPC (nugraph2 & nugraph3), run the following commands after cloning this repo in your working directory -
+
+    cd python_backend_scripts/
+    python client_gnn_nugraph2_grpc.py
+    python client_gnn_nugraph3_grpc.py
+
 
 ## C++ client inference
 
@@ -126,15 +134,15 @@ To send inference request from Python-client, we first read the  H5 data file an
 
 # Changes made to the existing code (Hacks at the server end)
 ## HitGraphProducer Class in Pynuml
-In the current release version of [HitGraphProducer class](https://github.com/nugraph/pynuml/blob/main/pynuml/process/hitgraph.py#L10) of pynuml repo, the constructor requires **_file:'pynuml.io.File'_**, which is not possible since pre-processing is happening at the server end and we don't have access to the h5 file there for that event. Hence, as an hack we had to make our [own HitGraphProducer class](https://github.com/rishi2019194/triton-python-backend-nugraph3/blob/main/gnn_models_check/nugraph3_new/1/model.py) which doesn't have h5 file as one of the constructor's arguement. Apart from that we add a [**_create_graph()_**](https://github.com/rishi2019194/triton-python-backend-nugraph3/blob/main/gnn_models_check/nugraph3_new/1/model.py#L48) in that class which pre-processes the input sent from the client for inference.
+In the current release version of [HitGraphProducer class](https://github.com/nugraph/pynuml/blob/main/pynuml/process/hitgraph.py#L10) of pynuml repo, the constructor requires **_file:'pynuml.io.File'_**, which is not possible since pre-processing is happening at the server end and we don't have access to the h5 file there for that event. Hence, as an hack we had to make our [own HitGraphProducer class](https://github.com/rishi2019194/triton-python-backend-nugraph3/blob/main/gnn_models/nugraph3/1/model.py#L19) which doesn't have h5 file as one of the constructor's arguement. Apart from that we add a [**_create_graph()_**](https://github.com/rishi2019194/triton-python-backend-nugraph3/blob/main/gnn_models/nugraph3/1/model.py#L45) in that class which pre-processes the input sent from the client for inference.
 
 ## EventLabels Class in Nugraph
 In the [EventLabels class](https://github.com/nugraph/nugraph/blob/main/nugraph/nugraph/util/event_labels.py#L16) in nugraph repo, we first need to check if [**_data["evt"]_** has attribute **_'y'_** or not](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/util/event_labels.py#L16). This is because during inference we won't have access to the ground truth labels of the event. Hence, we have added an if-condition to first check if _**'y'**_ is present as an attribute inside of _**data['evt']**_ or not.
 
-## Changes in Nugraph3.py
-In the current verison of [Nugraph3.py](https://github.com/nugraph/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L207) in nugraph repo, we are calculating loss after computing the inference results in the step() function. However, in inference we don't have acccess to the ground truth y-labels, hence we can't calculate loss. Thus, as an hack we have [commented the loss computation step](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L208) in our code. But, I think we should add a boolean argument in the step function which flags out the loss computation during inference.
+## Changes in Nugraph3.py & Nugraph2.py
+In the current verison of [Nugraph3.py](https://github.com/nugraph/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L207) in nugraph repo, we are calculating loss after computing the inference results in the step() function. However, in inference we don't have acccess to the ground truth y-labels, hence we can't calculate loss. Thus, as an hack we have [commented the loss computation step](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L207) in our code. But, I think we should add a boolean argument in the step function which flags out the loss computation during inference.
 
-Furthermore, to easily access the updated HeteroData object(data) which stores the inference result - we create a class attribute termed [**_data_**](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L205) via which we can access the inference  result and send that to  the  client.
+Furthermore, to easily access the updated HeteroData object(data) which stores the inference result - we create a class attribute termed **_data_** in both [nugraph3.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L204) and [nugraph2.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph2/NuGraph2.py#L141) via which we can access the inference  result and send that to the client.
 
 
 
