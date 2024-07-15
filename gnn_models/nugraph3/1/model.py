@@ -195,7 +195,6 @@ class NuGraph3_model(nn.Module):
 
     def __init__(self):
         super(NuGraph3_model, self).__init__()
-        print("Current working directory:", os.getcwd())
         self.MODEL = ng.models.nugraph3.nugraph3.NuGraph3
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         modelpath = os.path.dirname(os.path.abspath(__file__))
@@ -350,6 +349,7 @@ class TritonPythonModel:
                     hit_table_local_wire.as_numpy(), hit_table_integral.as_numpy(), hit_table_rms.as_numpy(), \
                     spacepoint_table_spacepoint_id.as_numpy(), spacepoint_table_hit_id_u.as_numpy(), spacepoint_table_hit_id_v.as_numpy(), \
                     spacepoint_table_hit_id_y.as_numpy())
+        
 
             # Create output tensors. You need pb_utils.Tensor
             # objects to create pb_utils.InferenceResponse.
