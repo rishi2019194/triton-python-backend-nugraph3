@@ -37,10 +37,10 @@ Step 4:
       cd triton-python-backend-nugraph3/
       tritonserver --model-repository gnn_models_pip/
 
-   3.  Using same version of python as python-stub of triton (3.10) with all libraries installed in numl environment via pip
+   3.  Using same version of python as python-stub of triton (3.10) with all libraries installed in numl conda environment via pip
 
       cd triton-python-backend-nugraph3/
-      tritonserver --model-repository gnn_models/
+      tritonserver --model-repository gnn_models_conda/
      
 
 ## Using pip command
