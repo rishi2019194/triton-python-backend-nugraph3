@@ -1,6 +1,6 @@
 # Using Triton-Python-Backend for Nugraph2 & NuGraph3
 In this repository, we discuss about how to deploy the NuGraph2 & NuGraph3 networks at Fermilab using triton's python-backend interface. 
-We provide the necessary code and libraries required for the setup and the commands to run the client and server side for running inference.
+We provide the necessary code and libraries required for the setup and the commands to run the client and server side for running inference. The client side is implemented in Python, standalone C++ and C++ with larsoft & Nusonic framework at Fermilab.
 
 # Overview of the Setup
 **Server Side:** In the server side, we recieve the data from the client for the - _particle_table_ and _spacepoint_table_. We then carry out the pre-processing necessary for creating a HeteroData Object as input for the Nugraph2/NuGraph3 network. We then pass the pre-processed HeteroData Graph object through the saved checkpoint NuGraph3 model which we already have loaded via pytorch-lightning. After getting the output from the model, we send the results back to the client.
