@@ -45,7 +45,6 @@ with pd.HDFStore('nugraph3_raw_event.h5', 'r') as test_data:
         "spacepoint_table_hit_id_v": np.array(test_data["spacepoint_table"]["hit_id_v"]).astype(np.int32),
         "spacepoint_table_hit_id_y": np.array(test_data["spacepoint_table"]["hit_id_y"]).astype(np.int32)
     }
-    print(test_inputs["hit_table_hit_id"].shape)
 
 
     test_inputs_triton = {}
