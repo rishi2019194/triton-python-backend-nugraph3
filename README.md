@@ -102,9 +102,8 @@ Step 4:
   
   
 
-
 # Client-side inference setup and commands
-We setup the client-side in - Python, C++ and C++ with LarSoft framework. It is preferred to use the C++ with LarSoft framework
+We setup the client-side in - Python, standalone C++ and C++ with LarSoft framework + Nusonic. It is preferred to use the C++ with LarSoft framework + Nusonic for faster inference without saving the event file and simplified user interface and easy code maintainence. 
 
 ## Python client inference
 To send inference request from Python-client, we first read the  H5 data file and then send the processed dictionary input for inference and display the results. 
@@ -128,9 +127,12 @@ To send inference request from Python-client, we first read the  H5 data file an
     python client_gnn_nugraph3_grpc.py
 
 
-## C++ client inference
+## Standalone C++ client inference
+To setup the standalone C++ client side for triton, we are working within the UPS environment where we install the necessary client side libraries for interacting with the Nugraph2/Nugraph3 model deployed at the eaf-server. The setup commands for the UPS environment are as follows:
 
-## C++ client with LarSoft framework 
+
+## C++ client with LarSoft framework & Nusonic
+Code and instructions related to this setup is available at - https://github.com/LArSoft/larrecodnn/tree/develop. 
 
 # Changes made to the existing code (Hacks at the server end)
 ## HitGraphProducer Class in Pynuml
