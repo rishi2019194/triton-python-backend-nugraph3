@@ -155,7 +155,7 @@ The setup commands for the UPS environment & running the C++ based client on GRP
     But do remember to build your executable again before running the file.    
 
 ## C++ client with LarSoft framework & Nusonic
-Code and instructions related to this setup is available at - https://github.com/LArSoft/larrecodnn/tree/develop. 
+Code and instructions related to this setup is available at - https://github.com/LArSoft/larrecodnn. 
 
 # Changes made to the existing code (Hacks at the server end)
 ## HitGraphProducer Class in Pynuml
