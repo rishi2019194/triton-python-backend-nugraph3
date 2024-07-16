@@ -1,0 +1,160 @@
+{
+   "configurePresets" : [
+      {
+         "cacheVariables" : {
+            "CETB_COMPAT_bin_dir" : {
+               "type" : "STRING",
+               "value" : "BIN_DIR"
+            },
+            "CETB_COMPAT_cmakemodule_dir" : {
+               "type" : "STRING",
+               "value" : "CMAKE_MODULES_DIR"
+            },
+            "CETB_COMPAT_fcl_dir" : {
+               "type" : "STRING",
+               "value" : "FHICL_DIR"
+            },
+            "CETB_COMPAT_fw_dir" : {
+               "type" : "STRING",
+               "value" : "FW_DIR"
+            },
+            "CETB_COMPAT_gdml_dir" : {
+               "type" : "STRING",
+               "value" : "GDML_DIR"
+            },
+            "CETB_COMPAT_inc_dir" : {
+               "type" : "STRING",
+               "value" : "INCLUDE_DIR"
+            },
+            "CETB_COMPAT_lib_dir" : {
+               "type" : "STRING",
+               "value" : "LIBRARY_DIR"
+            },
+            "CETB_COMPAT_perllib" : {
+               "type" : "STRING",
+               "value" : "PERLLIB_DIR"
+            },
+            "CETB_COMPAT_set_fw_dir" : {
+               "type" : "STRING",
+               "value" : "FW_SEARCH_PATH"
+            },
+            "CETB_COMPAT_set_wp_dir" : {
+               "type" : "STRING",
+               "value" : "WIRECELL_PATH"
+            },
+            "CETB_COMPAT_test_dir" : {
+               "type" : "STRING",
+               "value" : "TEST_DIR"
+            },
+            "CETB_COMPAT_wp_dir" : {
+               "type" : "STRING",
+               "value" : "WP_DIR"
+            },
+            "CMAKE_BUILD_TYPE" : {
+               "type" : "STRING",
+               "value" : "RelWithDebInfo"
+            },
+            "CMAKE_CXX_EXTENSIONS" : {
+               "type" : "BOOL",
+               "value" : "OFF"
+            },
+            "CMAKE_CXX_STANDARD_REQUIRED" : {
+               "type" : "BOOL",
+               "value" : "ON"
+            }
+         },
+         "description" : "Configuration settings translated from ups/product_deps",
+         "displayName" : "Configuration from product_deps",
+         "hidden" : true,
+         "name" : "from_product_deps"
+      },
+      {
+         "cacheVariables" : {
+            "CMAKE_CXX_COMPILER" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_CXX_COMPILER}"
+            },
+            "CMAKE_CXX_STANDARD" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_CXX_STANDARD}"
+            },
+            "CMAKE_C_COMPILER" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_C_COMPILER}"
+            },
+            "CMAKE_Fortran_COMPILER" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_Fortran_COMPILER}"
+            },
+            "UPS_CXX_COMPILER_ID" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_CXX_COMPILER_ID}"
+            },
+            "UPS_CXX_COMPILER_VERSION" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_CXX_COMPILER_VERSION}"
+            },
+            "UPS_C_COMPILER_ID" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_C_COMPILER_ID}"
+            },
+            "UPS_C_COMPILER_VERSION" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_C_COMPILER_VERSION}"
+            },
+            "UPS_Fortran_COMPILER_ID" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_Fortran_COMPILER_ID}"
+            },
+            "UPS_Fortran_COMPILER_VERSION" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_Fortran_COMPILER_VERSION}"
+            },
+            "WANT_UPS" : {
+               "type" : "BOOL",
+               "value" : true
+            },
+            "tritonclient_test_EXEC_PREFIX_INIT" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_FQ_DIR}"
+            },
+            "tritonclient_test_UPS_BUILD_ONLY_DEPENDENCIES_INIT" : {
+               "type" : "STRING",
+               "value" : "cetbuildtools"
+            },
+            "tritonclient_test_UPS_PRODUCT_FLAVOR_INIT" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_FLAVOR}"
+            },
+            "tritonclient_test_UPS_PRODUCT_NAME_INIT" : {
+               "type" : "STRING",
+               "value" : "tritonclient_test"
+            },
+            "tritonclient_test_UPS_QUALIFIER_STRING_INIT" : {
+               "type" : "STRING",
+               "value" : "$env{CETPKG_QUALSPEC}"
+            }
+         },
+         "description" : "Extra configuration for UPS package generation",
+         "displayName" : "UPS extra configuration",
+         "hidden" : true,
+         "name" : "extra_for_UPS"
+      },
+      {
+         "description" : "Default configuration including settings from ups/product_deps",
+         "displayName" : "Default configuration",
+         "inherits" : "from_product_deps",
+         "name" : "default"
+      },
+      {
+         "description" : "Default configuration for UPS package generation",
+         "displayName" : "Default configuration for UPS",
+         "inherits" : [
+            "default",
+            "extra_for_UPS"
+         ],
+         "name" : "for_UPS"
+      }
+   ],
+   "version" : 3
+}
