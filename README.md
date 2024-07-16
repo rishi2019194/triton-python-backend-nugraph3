@@ -131,6 +131,8 @@ To send inference request from Python-client, we first read the  H5 data file an
 To setup the standalone C++ client side for triton, we are working within the UPS environment where we install the necessary client side libraries for interacting with the Nugraph2/Nugraph3 model deployed at the eaf-server. 
 The setup commands for the UPS environment & running the C++ based client on GRPC are as follows (First clone this repo):
 
+  NOTE: Ensure that you first setup the Apptainer and export UPS_OVERRIDE!
+  
   Setup the UPS environment(replace the source /products/setup command with whatever you use to set up the UPS products)
   
     source /products/setup
@@ -149,10 +151,8 @@ The setup commands for the UPS environment & running the C++ based client on GRP
   Running client-side inference using grpc over the eaf-server
 
     cd testclient/src/
-    simple_grpc_infer_client.cc 
-    
-    Note: You can change the model from nugraph2 to nugraph3 or vice-versa in simple_grpc_infer_client as per your requirements. 
-    But do remember to build your executable again before running the file.    
+    simple_grpc_infer_client_nugraph2.cc 
+    simple_grpc_infer_client_nugraph3.cc   
 
 ## C++ client with LarSoft framework & Nusonic
 Code and instructions related to this setup is available at - https://github.com/LArSoft/larrecodnn. 
