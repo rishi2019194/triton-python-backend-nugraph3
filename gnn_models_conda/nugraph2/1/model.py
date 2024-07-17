@@ -349,19 +349,9 @@ class TritonPythonModel:
             out_tensor_5 = pb_utils.Tensor("x_filter_v", output5.astype(x_filter_v_dtype))
             out_tensor_6 = pb_utils.Tensor("x_filter_y", output6.astype(x_filter_y_dtype))
 
-            # print(output0, output1, output2, output3, output4, output5, output6, output7)
-            # print(out_tensor_0, out_tensor_1, out_tensor_2, out_tensor_3, out_tensor_4, out_tensor_5, out_tensor_6, out_tensor_7)
-            # Create InferenceResponse. You can set an error here in case
-            # there was a problem with handling this inference request.
-            # Below is an example of how you can set errors in inference
-            # response:
-            #
-            # pb_utils.InferenceResponse(
-            #    output_tensors=..., TritonError("An error occurred"))
             inference_response = pb_utils.InferenceResponse(
                 output_tensors=[out_tensor_1, out_tensor_2, out_tensor_3, out_tensor_4, out_tensor_5, out_tensor_6]
             )
-            # print(inference_response)
             responses.append(inference_response)
 
         # You should return a list of pb_utils.InferenceResponse. Length
