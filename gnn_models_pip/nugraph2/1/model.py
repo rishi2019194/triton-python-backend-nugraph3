@@ -282,7 +282,7 @@ class TritonPythonModel:
             x_filter_y_config["data_type"]
         )
         # Instantiate the PyTorch model
-        self.NuGraph3_model = NuGraph2_model()
+        self.NuGraph2_model = NuGraph2_model()
 
     def execute(self, requests):
         """`execute` must be implemented in every Python model. `execute`
