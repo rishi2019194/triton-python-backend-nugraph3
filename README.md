@@ -18,7 +18,7 @@ Step 1:
     https://docs.docker.com/get-docker/
  
 Step 2: 
-  Pulling and Running the triton server imagee for docker
+  Pulling and Running the triton server image for docker
   
     docker pull nvcr.io/nvidia/tritonserver:<xx.yy>-py3
     docker run --shm-size=1g --ulimit memlock=-1 -p 8000:8000 -p 8001:8001 -p 8002:8002 --ulimit stack=67108864 -v "$(pwd)":/mnt -ti nvcr.io/nvidia/tritonserver:<xx.yy>-py3
