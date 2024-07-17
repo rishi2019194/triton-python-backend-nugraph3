@@ -333,7 +333,7 @@ class TritonPythonModel:
             spacepoint_table_hit_id_y = pb_utils.get_input_tensor_by_name(request, "spacepoint_table_hit_id_y")
             
             output1, output2, output3, output4, output5, output6 = \
-                                        self.NuGraph3_model(hit_table_hit_id.as_numpy(), hit_table_local_plane.as_numpy(), \
+                                        self.NuGraph2_model(hit_table_hit_id.as_numpy(), hit_table_local_plane.as_numpy(), \
                                                     hit_table_local_time.as_numpy(), \
                     hit_table_local_wire.as_numpy(), hit_table_integral.as_numpy(), hit_table_rms.as_numpy(), \
                     spacepoint_table_spacepoint_id.as_numpy(), spacepoint_table_hit_id_u.as_numpy(), spacepoint_table_hit_id_v.as_numpy(), \
