@@ -11,7 +11,7 @@ triton expects as part of the configuration file (config.pbtxt). After doing so 
 # Installation Setup
 We provide with the installation steps using both pip and conda. It is preferred to use conda-environment, especially when working with the eaf-server.
 
-## Docker Setup
+## Docker Setup (without Apptainer)
 Step 1:
  Install Docker using the following line:
  
@@ -42,8 +42,33 @@ Step 4:
       cd triton-python-backend-nugraph3/
       tritonserver --model-repository gnn_models_conda/
      
+## Apptainer Setup (with Apptainer/Singularity)
+Step 1:
+  Pulling and Running the triton server docker image via apptainer
+  
+    apptainer pull nvcr.io/nvidia/tritonserver:<xx.yy>-py3
+    apptainer exec tritonserver_xx.yy-py3.sif /bin/bash
 
-## Using pip command
+    where <xx.yy> is triton version, eg - 24.05
+
+Step3:
+  Cloning the triton-python-backend-nugraph3 repo inside the apptainer
+
+     git clone https://github.com/rishi2019194/triton-python-backend-nugraph3.git
+     
+Step 4:
+   Starting the triton server for sending inference request (models-folder should be accessible from within the container and should follow the triton-expected format. Also, first install all the libraries using pip/conda)
+   1.  Using same version of python as python-stub of triton (3.10) with all libraries are installed in base environment via pip
+
+      cd triton-python-backend-nugraph3/
+      tritonserver --model-repository gnn_models_pip/
+
+   3.  Using same version of python as python-stub of triton (3.10) with all libraries installed in numl conda environment via pip
+
+      cd triton-python-backend-nugraph3/
+      tritonserver --model-repository gnn_models_conda/
+      
+## Using pip command (inside docker container)
   To run the triton-server, install the following libraries in the base environment of the docker container -
 
     git clone https://github.com/rishi2019194/nugraph.git
@@ -52,8 +77,19 @@ Step 4:
     pip install pynuml
     pip install matplotlib pynvml seaborn
 
+## Using pip command (inside apptainer)
+  To run the triton-server, install the following libraries in the base environment of the apptainer -
 
-## Using conda command
+    git clone https://github.com/rishi2019194/nugraph.git
+    pip install --no-deps -e ./nugraph/nugraph --prefix /exp/uboone/data/users/rsinghal
+    pip install pytorch_lightning --prefix /exp/uboone/data/users/rsinghal
+    pip install pynuml --prefix /exp/uboone/data/users/rsinghal
+    pip install matplotlib pynvml seaborn --prefix /exp/uboone/data/users/rsinghal
+
+  Exporting the python-path (necessary step)
+    export PYTHONPATH=/exp/uboone/data/users/rsinghal/local/lib/python3.10/dist-packages:$PYTHONPATH
+
+## Using conda command (inside docker container)
  To run the triton-server, create conda environment "numl" inside the docker container and then install necessary libraries inside the environment -
 
   Step 1: Install miniforge using the [mambaforge](https://github.com/conda-forge/miniforge#mambaforge) variant
@@ -159,7 +195,7 @@ Code and instructions related to this setup is available at - https://github.com
 
 # Changes made to the existing code (Hacks at the server end)
 ## HitGraphProducer Class in Pynuml
-In the current release version of [HitGraphProducer class](https://github.com/nugraph/pynuml/blob/main/pynuml/process/hitgraph.py#L10) of pynuml repo, the constructor requires **_file:'pynuml.io.File'_**, which is not possible since pre-processing is happening at the server end and we don't have access to the h5 file there for that event. Hence, as an hack we had to make our [own HitGraphProducer class](https://github.com/rishi2019194/triton-python-backend-nugraph3/blob/main/gnn_models/nugraph3/1/model.py#L19) which doesn't have h5 file as one of the constructor's arguement. Apart from that we add a [**_create_graph()_**](https://github.com/rishi2019194/triton-python-backend-nugraph3/blob/main/gnn_models/nugraph3/1/model.py#L45) in that class which pre-processes the input sent from the client for inference.
+In the current release version of [HitGraphProducer class](https://github.com/nugraph/pynuml/blob/main/pynuml/process/hitgraph.py#L10) of pynuml repo, the constructor requires **_file:'pynuml.io.File'_**, which is not possible since pre-processing is happening at the server end and we don't have access to the h5 file there for that event. Hence, as an hack we had to make our [own HitGraphProducer class](https://github.com/rishi2019194/triton-python-backend-nugraph3/blob/main/gnn_models_conda/nugraph3/1/model.py#L19) which doesn't have h5 file as one of the constructor's arguement. Apart from that we add a [**_create_graph()_**](https://github.com/rishi2019194/triton-python-backend-nugraph3/blob/main/gnn_models_conda/nugraph3/1/model.py#L45) in that class which pre-processes the input sent from the client for inference.
 
 ## EventLabels Class in Nugraph
 In the [EventLabels class](https://github.com/nugraph/nugraph/blob/main/nugraph/nugraph/util/event_labels.py#L16) in nugraph repo, we first need to check if [**_data["evt"]_** has attribute **_'y'_** or not](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/util/event_labels.py#L16). This is because during inference we won't have access to the ground truth labels of the event. Hence, we have added an if-condition to first check if _**'y'**_ is present as an attribute inside of _**data['evt']**_ or not.
@@ -169,6 +205,9 @@ In the current verison of [Nugraph3.py](https://github.com/nugraph/nugraph/blob/
 
 Furthermore, to easily access the updated HeteroData object(data) which stores the inference result - we create a class attribute termed **_data_** in both [nugraph3.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L204) and [nugraph2.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph2/NuGraph2.py#L141) via which we can access the inference  result and send that to the client.
 
+# Problems to be addressed later
+## Temporary solution to make NuSonic Triton work
+In the previous implementation of NuSonic, it assumed that inputs have to be of fixed size in every batch. However, that is not true for NuGraph where in every batch the inputs can be of different shapes. Hence, in the config file we keep the shape as "-1". So, to successfully have NuSonic working we create InferInput() objects by checking the shape of the given input instead of from the config file. But, this is a temporary solution because if later we want to support batching with batch-size>1 for NuGraph, we will have to set InferInput() objects with different shapes for every input in the batch. Therefore, this issue needs to be addresseed in future iterations of NuSonic Triton.
 
-
-
+## Pulling triton server docker image inside Apptainer 
+To setup the triton server inside the Apptainer of the gpvm machine, we have to pull the docker image and it gets converted to ".sif" format. However, the time to do this is approximately 3-4hrs which is an absurd amount of time. Thus, we need to look for alternatives for this.

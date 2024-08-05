@@ -85,6 +85,7 @@ ipython_config.py
 #numl
 gnn_models_conda/nugraph3/numl.tar.gz
 gnn_models_conda/nugraph2/numl.tar.gz
+gnn_models_conda/nugraph2_cpu/numl.tar.gz
 
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is
