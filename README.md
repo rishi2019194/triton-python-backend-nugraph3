@@ -86,7 +86,8 @@ Step 4:
     pip install pynuml --prefix /exp/uboone/data/users/rsinghal
     pip install matplotlib pynvml seaborn --prefix /exp/uboone/data/users/rsinghal
 
-  Exporting the python-path (necessary step)
+  Exporting the python-path (necessary step)- 
+
     export PYTHONPATH=/exp/uboone/data/users/rsinghal/local/lib/python3.10/dist-packages:$PYTHONPATH
 
 ## Using conda command (inside docker container)
