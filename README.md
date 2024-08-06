@@ -206,6 +206,31 @@ In the current verison of [Nugraph3.py](https://github.com/nugraph/nugraph/blob/
 
 Furthermore, to easily access the updated HeteroData object(data) which stores the inference result - we create a class attribute termed **_data_** in both [nugraph3.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L204) and [nugraph2.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph2/NuGraph2.py#L141) via which we can access the inference  result and send that to the client.
 
+# Timing Analysis
+We did a timing performance analysis of the triton server-client interaction using the larsoft setup in c++. We used 6 events and compute the inference time using "chrono" library for both normal triton and Nusonic triton setup. We did this analysis  for with and without GPU at the EAF and also did an analysis by running the triton server on the GPVM inside the apptainer(no GPU). Some of the interesting results we see are - 
+
+## EAF - Server Performance Tests(Avg Inference Time for 6 events)
+### With GPU
+Triton-gpu - 0.235s, Nusonic-gpu - 0.1643s
+
+### Without GPU
+Triton-cpu -1.471s, Nusonic-cpu - 0.1997s
+
+## Apptainer - Server Performance Tests(Avg Inference Time for 6 events)
+### Without GPU
+Triton-cpu - 1.403s ,Nusonic-cpu - 1.474s
+
+## 3 Observations from the results- 
+### GPU Inference is faster in comparison to CPU Inference
+When we run the performance tests using the EAF-server with and without GPU, we clearly see that avg runtime inference with GPU is better than with CPU for both normal triton and NuSonic triton setup.
+
+### NuSonic Inference Time is mostly better
+From the results we see that the inference time that Nusonic setup takes is equal or better than than the normal triton performance. Thereby making it a good choice as it not only simplifies user interface without worrying about triton specific details and make code maintenance easier, but also is faster than normal triton setup.
+
+### EAF-Server(Remote) Inference is faster than Apptainer(Local Machine)
+We observe that CPU inference for EAF-server is slightly faster than the Apptainer, i.e., remote inferennce is better than local machine inference.
+
+
 # Problems to be addressed later
 ## Temporary solution to make NuSonic Triton work
 In the previous implementation of NuSonic, it assumed that inputs have to be of fixed size in every batch. However, that is not true for NuGraph where in every batch the inputs can be of different shapes. Hence, in the config file we keep the shape as "-1". So, to successfully have NuSonic working we create InferInput() objects by checking the shape of the given input instead of from the config file. But, this is a temporary solution because if later we want to support batching with batch-size>1 for NuGraph, we will have to set InferInput() objects with different shapes for every input in the batch. Therefore, this issue needs to be addresseed in future iterations of NuSonic Triton.
