@@ -211,14 +211,14 @@ We did a timing performance analysis of the triton server-client interaction usi
 
 ## EAF - Server Performance Tests(Avg Inference Time for 6 events)
 ### With GPU
-Triton-gpu - 0.235s, Nusonic-gpu - 0.1643s
+Triton-gpu - 0.095s, Nusonic-gpu - 0.122s
 
 ### Without GPU
-Triton-cpu -1.471s, Nusonic-cpu - 0.1997s
+Triton-cpu - 0.638s, Nusonic-cpu - 0.1469s
 
 ## Apptainer - Server Performance Tests(Avg Inference Time for 6 events)
 ### Without GPU
-Triton-cpu - 1.403s ,Nusonic-cpu - 1.474s
+Triton-cpu - 1.2399s ,Nusonic-cpu - 0.990s
 
 ## 3 Observations from the results- 
 ### GPU Inference is faster in comparison to CPU Inference
