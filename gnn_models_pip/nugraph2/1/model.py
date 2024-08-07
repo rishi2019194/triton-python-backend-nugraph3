@@ -94,15 +94,6 @@ class HitGraphProducer():
         # reset spacepoint index
         spacepoints = spacepoints.reset_index(names='index_3d')
 
-        # skip events with fewer than lower_bnd simulated hits in any plane.
-        # note that we can't just do a pandas groupby here, because that will
-        # skip over any planes with zero hits
-        for i in range(len(self.planes)):
-            planehits = hits[hits.local_plane==i]
-            nhits = planehits.filter_label.sum() if self.semantic_labeller else planehits.shape[0]
-            if nhits < self.lower_bound:
-                return evt.name, None
-
         # get labels for each particle
         if self.semantic_labeller:
             particles = self.semantic_labeller(evt['particle_table'])
