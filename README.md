@@ -207,7 +207,7 @@ In the current verison of [Nugraph3.py](https://github.com/nugraph/nugraph/blob/
 Furthermore, to easily access the updated HeteroData object(data) which stores the inference result - we create a class attribute termed **_data_** in both [nugraph3.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L204) and [nugraph2.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph2/NuGraph2.py#L141) via which we can access the inference  result and send that to the client.
 
 # Timing Analysis
-We did a timing performance analysis of the triton server-client interaction using the larsoft setup in c++. We used 6 events and compute the inference time using "chrono" library for both normal triton and Nusonic triton setup. We did this analysis  for with and without GPU at the EAF and also did an analysis by running the triton server on the GPVM inside the apptainer(no GPU). Some of the interesting results we see are - 
+We did a timing performance analysis of the triton server-client interaction using the larsoft setup in c++. We used 6 events and compute the inference time using "chrono" library for both normal triton and Nusonic triton setup. We did this analysis  for with and without GPU at the EAF and also did an analysis by running the triton server on the GPVM inside the apptainer(no GPU). Furthermore  we also compared against the baseline of CPU inference in the gpvm with jit model. Some of the interesting results we see are - 
 
 ## EAF - Server Performance Tests(Avg Inference Time for 6 events)
 ### With GPU
@@ -216,19 +216,22 @@ Triton-gpu - 0.095s, Nusonic-gpu - 0.122s
 ### Without GPU
 Triton-cpu - 0.638s, Nusonic-cpu - 0.1469s
 
-## Apptainer - Server Performance Tests(Avg Inference Time for 6 events)
+## Apptainer - Server(GPVM) Performance Tests(Avg Inference Time for 6 events)
 ### Without GPU
 Triton-cpu - 1.2399s ,Nusonic-cpu - 0.990s
+
+## CPU Inference on GPVM using JIT model(Avg Inference Time for 6 events)
+Inference-cpu time - 0.635s
 
 ## 3 Observations from the results- 
 ### GPU Inference is faster in comparison to CPU Inference
 When we run the performance tests using the EAF-server with and without GPU, we clearly see that avg runtime inference with GPU is better than with CPU for both normal triton and NuSonic triton setup.
 
-### NuSonic Inference Time is mostly better
-From the results we see that the inference time that Nusonic setup takes is equal or better than than the normal triton performance. Thereby making it a good choice as it not only simplifies user interface without worrying about triton specific details and make code maintenance easier, but also is faster than normal triton setup.
-
 ### EAF-Server(Remote) Inference is faster than Apptainer(Local Machine)
 We observe that CPU inference for EAF-server is slightly faster than the Apptainer, i.e., remote inferennce is better than local machine inference.
+
+### Triton-GPU Inference on the EAF faster than CPU Inference on GPVM using JIT model
+We clearly see that avg runtime for Triton-based GPU Inference on the EAF is faster than CPU inference on GPVM using JIT model. And its comparable to CPU based inference on the EAF.
 
 
 # Problems to be addressed later
