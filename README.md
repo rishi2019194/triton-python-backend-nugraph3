@@ -223,7 +223,7 @@ Triton-cpu - 9.50s ,Nusonic-cpu - 10.61s
 ## CPU Inference on GPVM using JIT model(Avg Inference Time for 22 events)
 Inference-cpu time - 0.32s
 
-## 3 Observations from the results- 
+## Observations from the results- 
 ### GPU Inference is faster in comparison to CPU Inference
 When we run the performance tests using the EAF-server with and without GPU, we clearly see that avg runtime inference with GPU is better than with CPU for both normal triton and NuSonic triton setup.
 
