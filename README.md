@@ -207,7 +207,7 @@ In the current verison of [Nugraph3.py](https://github.com/nugraph/nugraph/blob/
 Furthermore, to easily access the updated HeteroData object(data) which stores the inference result - we create a class attribute termed **_data_** in both [nugraph3.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L204) and [nugraph2.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph2/NuGraph2.py#L141) via which we can access the inference  result and send that to the client.
 
 # Timing Analysis
-We did a timing performance analysis of the triton server-client interaction using the larsoft setup in c++. We used 6 events and compute the inference time using "chrono" library for both normal triton and Nusonic triton setup. We did this analysis  for with and without GPU at the EAF and also did an analysis by running the triton server on the GPVM inside the apptainer(no GPU). Furthermore  we also compared against the baseline of CPU inference in the gpvm with jit model. Some of the interesting results we see are - 
+We did a timing performance analysis(pre-processing + ML inference time) of the triton server-client interaction using the larsoft setup in c++. We used 6 events and compute the inference time using "chrono" library for both normal triton and Nusonic triton setup. We did this analysis  for with and without GPU at the EAF and also did an analysis by running the triton server on the GPVM inside the apptainer(no GPU). Furthermore  we also compared against the baseline of CPU inference in the gpvm with jit model. Some of the interesting results we see are - 
 
 ## EAF - Server Performance Tests(Avg Inference Time for 96 events)
 ### With GPU
@@ -220,8 +220,8 @@ Triton-cpu - 0.51s, Nusonic-cpu - 0.48s
 ### Without GPU
 Triton-cpu - 9.50s ,Nusonic-cpu - 10.61s
 
-## CPU Inference on GPVM using JIT model(Avg Inference Time for 22 events)
-Inference-cpu time - 0.32s
+## CPU Inference on GPVM using JIT model(Avg Inference Time for 95 events)
+Inference-cpu time - 0.39s (54th record, i.e., 387th event couldn't get pre-processed for  c++ delaunator operation)
 
 ## Observations from the results- 
 ### GPU Inference is faster in comparison to CPU Inference
@@ -244,5 +244,5 @@ In the previous implementation of NuSonic, it assumed that inputs have to be of 
 ## Pulling triton server docker image inside Apptainer 
 To setup the triton server inside the Apptainer of the gpvm machine, we have to pull the docker image and it gets converted to ".sif" format. However, the time to do this is approximately 3-4hrs which is an absurd amount of time. Thus, we need to look for alternatives for this.
 
-## JIT model Nugraph inference is stuck for 54th record
-While running inference using the JIT model on the CPU, the reading/pre-processing part of the code is stuck for the 54th record. Needs  to be looked into later on why it is stuck
+## JIT model Nugraph inference is stuck for 54th record(387th event)
+While running inference using the JIT model on the CPU, the reading/pre-processing part of the code is stuck for the 54th record(387th event). Needs  to be looked into later on why it is stuck. After some debugging  the possible problem is the in the [Delunator calculation](https://github.com/rishi2019194/larrecodnn/blob/develop/larrecodnn/NuGraph/NuGraphInference_module.cc#L153).
