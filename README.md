@@ -248,3 +248,14 @@ To setup the triton server inside the Apptainer of the gpvm machine, we have to 
 
 ## JIT model Nugraph inference is stuck for 54th record(387th event)
 While running inference using the JIT model on the CPU, the reading/pre-processing part of the code is stuck for the 54th record(387th event). Needs  to be looked into later on why it is stuck. After some debugging  the possible problem is the in the [Delunator calculation](https://github.com/rishi2019194/larrecodnn/blob/develop/larrecodnn/NuGraph/NuGraphInference_module.cc#L153).
+
+# Future work
+
+1. We would also want to run more scalability tests of the triton-inference setup. Some other tests worth considering could be - 
+
+  - Analyse the breakdown of the measured time (time to send and receive input-output data, pre-processing time, inference time and other network latency parameters)
+  - Understand why the Apptainer inference time is so bad
+  - Performance analysis when multiple clients are sending request at once
+
+2. Make the code adaptable to batch size > 1 by using the InferMulti() function at the C++ client end. And then do a performance analysis for varying batch sizes during inference.
+
