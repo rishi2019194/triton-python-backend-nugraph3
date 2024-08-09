@@ -207,14 +207,16 @@ In the current verison of [Nugraph3.py](https://github.com/nugraph/nugraph/blob/
 Furthermore, to easily access the updated HeteroData object(data) which stores the inference result - we create a class attribute termed **_data_** in both [nugraph3.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph3/nugraph3.py#L204) and [nugraph2.py](https://github.com/rishi2019194/nugraph/blob/main/nugraph/nugraph/models/nugraph2/NuGraph2.py#L141) via which we can access the inference  result and send that to the client.
 
 # Timing Analysis
-We did a timing performance analysis(pre-processing + ML inference time) of the triton server-client interaction using the larsoft setup in c++. We used 6 events and compute the inference time using "chrono" library for both normal triton and Nusonic triton setup. We did this analysis  for with and without GPU at the EAF and also did an analysis by running the triton server on the GPVM inside the apptainer(no GPU). Furthermore  we also compared against the baseline of CPU inference in the gpvm with jit model. Some of the interesting results we see are - 
+We did a timing performance analysis(pre-processing + ML inference time) of the triton server-client interaction using the larsoft setup in c++. We used 6 events and compute the inference time using "chrono" library for both normal triton and Nusonic triton setup. We did this analysis  for with and without GPU at the EAF and also did an analysis by running the triton server on the GPVM inside the apptainer(no GPU). Furthermore we also compared against the baseline of CPU inference in the gpvm with jit model. To get the avg timing results, run the [timing_analysis_script.py in the larrecodnn repo.](https://github.com/rishi2019194/larrecodnn/blob/develop/larrecodnn/NuGraph/logs/timing_analysis_script.py)
+
+Some of the interesting results we observe are as follows- 
 
 ## EAF - Server Performance Tests(Avg Inference Time for 96 events)
 ### With GPU
-Triton-gpu - 0.19s, Nusonic-gpu - 0.13s
+Triton-gpu - 0.12s, Nusonic-gpu - 0.11s
 
 ### Without GPU
-Triton-cpu - 0.51s, Nusonic-cpu - 0.48s
+Triton-cpu - 0.52s, Nusonic-cpu - 0.58s
 
 ## Apptainer - Server(GPVM) Performance Tests(Avg Inference Time for 96 events)
 ### Without GPU
